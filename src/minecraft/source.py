@@ -64,10 +64,17 @@ def _generate_sources_with_yarn(version: Version, path: str) -> None:
 		shutil.rmtree(src_path)
 
 	# Move the generated source code to $repo_dir/src
-	shutil.move(
-		os.path.join(decompiler_repo.path, 'namedSrc'),
-		src_path
-	)
+	try:
+		shutil.move(
+			os.path.join(decompiler_repo.path, 'namedSrc'),
+			src_path
+		)
+	except FileNotFoundError:
+		# It might be in a 'build' directory
+		shutil.move(
+			os.path.join(decompiler_repo.path, 'build', 'namedSrc'),
+			src_path
+		)
 
 
 def _generate_sources_with_mojang(version: Version, path: str) -> None:
